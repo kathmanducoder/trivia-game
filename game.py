@@ -44,16 +44,18 @@ for trivia_entry in results:
 # commit all the insertion to trivia database
 db.commit()
 
-print("########################################################")
 print()
-print("           Welcome to my trivia game.")
-print("          Type 'Quit' to end the game.")
+print("                                   ---                                        ")
 print()
-print("########################################################")
+print("                    Welcome to True or False trivia game!                     ")
+print("              Answer True or False and see your score go up!                  ")
+print("              Total 3 questions. Quit anytime by typing 'Quit'                ")
+print("                                  READY?                                      ")
+print("                                   ---                                        ")
 print()
 question_number, total_correct = 0, 0
 
-while (True):
+while (question_number < 3):
   question_number += 1
   # select a random row from the database
   cursor.execute('''SELECT * FROM trivia ORDER BY RANDOM() LIMIT 1''')
@@ -61,25 +63,22 @@ while (True):
   for row in cursor:
     question, answer = row[1], row[2]
   #print question
-  print("Question %d: %s True or False?" % (question_number,question))
-  user_answer = input("> ")
+  # print("-> %s Is that True?" % question)
+  user_answer = input("-> %s Is that True?  " % question)
   if user_answer.lower() == answer.lower():
-    print("That's right!")
     total_correct += 1
+    print("GOOD JOB! Your updated score is: %d/%d" % (total_correct, question_number))
   elif user_answer.lower() == 'quit':
     print()
-    print("Quitting game.")
     question_number -= 1
     break
   else:
-    print("Sorry. The correct answer is: %s" % answer)
-  print("Score: %d/%d" % (total_correct, question_number))
+    print("SORRY! That's the wrong answer. Your updated score is: %d/%d" % (total_correct, question_number))
   print()
 
-final_score_percent = 0
-if question_number != 0:
-  final_score_percent = (total_correct * 100)/question_number
-print("Final Score: %d%% (%d/%d)" % (final_score_percent, total_correct, question_number))	
+print("                           Thank you for playing!                         ")
+print("                           FINAL SCORE - %d/%d                            " % (total_correct, question_number))
+print("                                    ---                                    ")
 print()
 
 # close sqlite database
